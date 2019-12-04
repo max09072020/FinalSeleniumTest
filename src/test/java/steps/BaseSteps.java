@@ -4,6 +4,7 @@ import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import util.TestProperties;
 
 import java.util.Properties;
@@ -32,8 +33,11 @@ public class BaseSteps {
 
     }
     @After
-    public static void wrapUp(){
+    public static void wrapUp() throws InterruptedException {
+
+        WebDriverWait wait = new WebDriverWait(BaseSteps.getMydriver(), 3);
         mydriver.quit();
+
     }
     }
 

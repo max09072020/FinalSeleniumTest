@@ -48,7 +48,7 @@ public class ActionPage {
     }
 
     public ArrayList<String> resultList (){
-        List<WebElement> searchList = BaseSteps.getMydriver().findElements(By.xpath("//div[@class='n-snippet-card2__title']//a"));
+        List<WebElement> searchList = BaseSteps.getMydriver().findElements(By.xpath("//h3[@class='n-snippet-card2__title']"));
         List <String> titles = searchList.stream().map(WebElement::getText).collect(Collectors.toList());
         return (ArrayList<String>) titles;
     }

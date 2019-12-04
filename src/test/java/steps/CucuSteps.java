@@ -3,6 +3,10 @@ package steps;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.ActionPage;
 import pages.MainPage;
 
@@ -33,8 +37,20 @@ public class CucuSteps {
     }
 
     @When("^пользователь устанавливает минимальную сумму в \"(.*)\" в фильтре$")
-    public void selectMinAmountStep (String minAmount){
-       actionPage.fillPrice(minAmount);
+    public void selectMinAmountStep (String minAmount) {
+        actionPage.fillPrice(minAmount);
+    }
+
+    @When("^пользователь просматривает сообщение о найденых товарах$")
+    public void lookForSearchMessage (){
+        WebElement element = null;
+        WebDriverWait wait = new WebDriverWait(BaseSteps.getMydriver(), 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("_1RqJzaMsJQ _1yevJbN4UM _3zMtk0OXjW")));
+        element = BaseSteps.getMydriver().findElement(By.xpath("//div[@data-d6578eea ='true']//div[@class='_1RqJzaMsJQ _1yevJbN4UM _3zMtk0OXjW']"));
+        if (element != null){
+            System.out.println(element.getAttribute("innetText"));
+        }
+
     }
 
     @When("пользователь задаёт характеристики поиска$")
@@ -48,11 +64,12 @@ public class CucuSteps {
     public void checkResults (String value){
         BaseSteps.getMydriver().navigate().refresh();
         int newValue = Integer.parseInt(value);
-        Assert.assertEquals(newValue, actionPage.resultList().size());
+        Assert.assertTrue(newValue <= actionPage.resultList().size());
     }
 
     @When("пользователь вводит \"(.*)\" элемент в поле поиска$")
     public void searchAny (String searchVal){
+        BaseSteps.getMydriver().manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
         int index = Integer.parseInt(searchVal);
         actionPage.search(actionPage.resultList().get(index - 1));
         BaseSteps.getMydriver().manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
